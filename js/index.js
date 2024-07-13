@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const formContainer = document.querySelector('.dark-form-container');
-
+    const formContainer = document.querySelector('.card');
     formContainer.style.opacity = 0;
     formContainer.style.transform = 'scale(0.9)';
     setTimeout(() => {
