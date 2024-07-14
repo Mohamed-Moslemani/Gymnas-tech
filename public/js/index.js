@@ -1,39 +1,46 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const formContainer = document.querySelector('.card');
-    formContainer.style.opacity = 0;
-    formContainer.style.transform = 'scale(0.9)';
-    setTimeout(() => {
-        formContainer.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-        formContainer.style.opacity = 1;
-        formContainer.style.transform = 'scale(1)';
-    }, 100);
+    if (window.location.pathname.includes('signup.html')) {
+        const formContainer = document.querySelector('.card');
+        formContainer.style.opacity = 0;
+        formContainer.style.transform = 'scale(0.9)';
+        setTimeout(() => {
+            formContainer.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            formContainer.style.opacity = 1;
+            formContainer.style.transform = 'scale(1)';
+        }, 100);
 
-    document.getElementById('signup-form').addEventListener('submit', function(event) {
-        event.preventDefault();
-        const form = event.target;
-        const email = document.getElementById('email').value;
-        const emailValid = validateEmail(email);
+        const signupForm = document.getElementById('signup-form');
+        if (signupForm) {
+            console.log('Signup form found');
+            signupForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                const form = event.target;
+                const email = document.getElementById('email').value;
+                const emailValid = validateEmail(email);
 
-        if (!emailValid) {
-            document.getElementById('email').classList.add('is-invalid');
-            document.getElementById('email-error').textContent = "Please provide a valid email address.";
-            event.stopPropagation();
+                if (!emailValid) {
+                    document.getElementById('email').classList.add('is-invalid');
+                    document.getElementById('email-error').textContent = "Please provide a valid email address.";
+                    event.stopPropagation();
+                } else {
+                    document.getElementById('email').classList.remove('is-invalid');
+                    document.getElementById('email-error').textContent = "";
+                    if (form.checkValidity() === false) {
+                        event.stopPropagation();
+                    } else {
+                        // Submit the form
+                        submitForm();
+                    }
+                    form.classList.add('was-validated');
+                }
+            });
         } else {
-            document.getElementById('email').classList.remove('is-invalid');
-            document.getElementById('email-error').textContent = "";
-            if (form.checkValidity() === false) {
-                event.stopPropagation();
-            } else {
-                // Submit the form
-                submitForm();
-            }
-            form.classList.add('was-validated');
+            console.error('Signup form not found');
         }
-    });
+    }
 });
 
 function validateEmail(email) {
-    // Use validator to check if the email is valid
     return validator.isEmail(email);
 }
 
@@ -43,7 +50,7 @@ function submitForm() {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
-    fetch('http://localhost:3000/register', {  // Ensure the correct server URL is used here
+    fetch('http://localhost:3000/register', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -59,6 +66,7 @@ function submitForm() {
         return response.json();
     })
     .then(data => {
+        console.log(data);
         window.location.href = 'signin.html';
     })
     .catch(error => {
@@ -72,6 +80,6 @@ function handleRegistrationError(errorMessage) {
         emailInput.classList.add('is-invalid');
         document.getElementById('email-error').textContent = "This email is already registered. Please use a different email.";
     } else {
-        alert('Registration failed');
+        alert(`Registration failed: ${errorMessage}`);
     }
 }

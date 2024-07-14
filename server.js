@@ -4,20 +4,16 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
-const { google } = require('googleapis');
 const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
 app.use(bodyParser.json());
-app.use(express.static('public'));  // Serve static files from the "public" directory
-app.use(cors());  // Enable CORS if needed
+app.use(express.static('public'));  
+app.use(cors());  
 
 // MongoDB connection
-mongoose.connect('mongodb://localhost:27017/user_auth', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-});
+mongoose.connect('mongodb://localhost:27017/user_auth')
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -35,10 +31,32 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', userSchema);
 
+// Middleware to protect routes
+const authenticateJWT = (req, res, next) => {
+  const token = req.header('Authorization');
+
+  if (token) {
+    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+      if (err) {
+        return res.sendStatus(403);
+      }
+
+      req.user = user;
+      next();
+    });
+  } else {
+    res.sendStatus(401);
+  }
+};
 // Register route
 app.post('/register', async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
   console.log('Received registration data:', req.body);
+
+  if (!firstName || !lastName || !email || !password) {
+    console.error('Validation error: Missing required fields');
+    return res.status(400).send({ message: 'Missing required fields' });
+  }
 
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -48,14 +66,14 @@ app.post('/register', async (req, res) => {
     await user.save();
     console.log('User saved:', user);
 
-    res.status(201).send('User registered');
+    res.status(201).json({ message: 'User registered' }); // Return a JSON response
   } catch (err) {
     console.error('Error saving user:', err);
     res.status(500).send({ message: err.message });
   }
 });
 
-// Login route
+
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
   console.log('Received login data:', req.body);
