@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "mongoose": "^8.5.1",
+    "mongose": "^0.0.2-security",
+    "node": "^18.20.4",
+    "nodemailer": "^6.9.14"
+  }
+}
