@@ -38,6 +38,19 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Signup form not found');
         }
     }
+
+    if (window.location.pathname.includes('signin.html')) {
+        const signinForm = document.getElementById('signin-form');
+        if (signinForm) {
+            signinForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                // Simulating successful sign-in
+                window.location.href = 'home.html';
+            });
+        } else {
+            console.error('Signin form not found');
+        }
+    }
 });
 
 function validateEmail(email) {
