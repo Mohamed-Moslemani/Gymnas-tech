@@ -84,36 +84,6 @@ body, html {
     box-sizing: border-box;
     font-family: 'Helvetica Neue', sans-serif;
 }
-
-/* Style the navbar */
-.navbar {
-    background-color: #2c3e50 !important; /* Darker background for the navbar */
-}
-
-.navbar-brand {
-    color: #ecf0f1 !important; /* Light text for the brand */
-}
-
-.navbar-nav .nav-link {
-    color: #ecf0f1 !important; /* Light text for the links */
-}
-
-.navbar-nav .nav-link:hover {
-    color: #3498db !important; /* Blue color on hover */
-}
-
-.navbar-nav .nav-item.active .nav-link {
-    font-weight: bold;
-    color: #3498db !important; /* Blue color for the active link */
-}
-
-/* Add a container for the content */
-.container {
-    margin-top: 50px;
-    text-align: center;
-}
-
-/* Add some basic styling for headings and paragraphs */
 h1 {
     color: #2c3e50;
     font-size: 2.5rem;

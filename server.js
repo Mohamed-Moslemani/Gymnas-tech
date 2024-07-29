@@ -66,7 +66,7 @@ app.post('/register', async (req, res) => {
     await user.save();
     console.log('User saved:', user);
 
-    res.status(201).json({ message: 'User registered' }); // Return a JSON response
+    res.status(201).json({ message: 'User registered' }); 
   } catch (err) {
     console.error('Error saving user:', err);
     res.status(500).send({ message: err.message });
