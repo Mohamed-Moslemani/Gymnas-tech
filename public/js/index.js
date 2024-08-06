@@ -96,3 +96,4 @@ function handleRegistrationError(errorMessage) {
         alert(`Registration failed: ${errorMessage}`);
     }
 }
+    
